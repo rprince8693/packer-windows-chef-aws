@@ -1,0 +1,40 @@
+#!groovy
+
+node('ubuntu-docker-host')
+{
+  stage ('Checkout')
+  {
+      sh "env | sort"
+      checkout scm
+  }
+
+  stage ('Test')
+  {
+    try {
+      switch (env.BRANCH_NAME)
+        {
+          case 'develop':
+            // Push it to the Chef server Dev org
+            // Smoketest?  Spin up short lived environment - different region?
+          case 'master':
+            // Push it to the Chef server
+          default:
+            // This is a PR - just lint it to prepare for manual review
+            rubocop_status = sh returnStatus: true, script: 'cookstyle'
+            foodcritic_status = sh returnStatus: true, script: 'foodcritic recipes/*'
+
+            // Mark build unstable if any linters fail
+            if (rubocop_status || foodcritic_status)
+              currentBuild.result = 'UNSTABLE'
+            else
+              currentBuild.result = 'SUCCESS'
+        }
+    } catch (Exception err) {
+      currentBuild.result = 'FAILURE'
+
+    } finally {
+      warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Foodcritic'], [parserName: 'Rubocop --format emacs']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: ''
+    }
+  }
+}
+

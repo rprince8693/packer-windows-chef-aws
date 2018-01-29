@@ -1,0 +1,20 @@
+DEPENDENCIES
+  aws_build_dotnetcore
+    path: .
+    metadata: true
+
+GRAPH
+  aws_build_dotnetcore (0.1.0)
+    chocolatey (~> 1.1.0)
+    cygwin (~> 0.7.0)
+    wsus-client (~> 2.0.0)
+  chocolatey (1.1.1)
+    windows (>= 1.38)
+  cygwin (0.7.0)
+    windows (> 0.0)
+    windows_firewall (~> 3.0.0)
+  ohai (5.2.0)
+  windows (3.4.1)
+    ohai (>= 4.0.0)
+  windows_firewall (3.0.2)
+  wsus-client (2.0.0)

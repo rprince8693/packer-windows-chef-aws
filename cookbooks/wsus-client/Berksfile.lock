@@ -1,0 +1,11 @@
+DEPENDENCIES
+  wsus-client
+    path: .
+    metadata: true
+  wsus-client-test
+    path: test/cookbooks/wsus-client-test
+
+GRAPH
+  wsus-client (2.0.0)
+  wsus-client-test (0.1.0)
+    wsus-client (>= 0.0.0)
